@@ -8,12 +8,9 @@ vector_limit = 20 # shift vector elimination limit
 block_counter = 0
 block_size = 8
 image = cv2.imread('forged1.png')
-mask = cv2.imread('forged1_mask.png')
-mask_gray = cv2.cvtColor(mask, cv2.COLOR_RGB2GRAY)
 gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
 temp = []
 arr = np.array(gray)
-mask = np.array(mask_gray)
 prediction_mask = np.zeros((arr.shape[0], arr.shape[1]))
 column = arr.shape[1] - block_size
 row = arr.shape[0] - block_size
@@ -45,7 +42,7 @@ for i in range(0, row):
         for item in range(0,(block_size*2-1)):
             temp += solution[item]
 
-        temp = np.asarray(temp, dtype=np.float)
+        temp = np.asarray(temp, dtype=float)
         temp = np.array(temp[:16])
         temp = np.floor(temp/quantization)
         temp = np.append(temp, [i, j])
@@ -130,38 +127,6 @@ for i in range(0, sim_array.shape[0]):
             prediction_mask[index3+j][index4+k] = 255
 
 print("painting over!")
-
-#----------------------------------------------------------------------------------------
-
-print("accuracy calculating...")
-
-TP = 0
-FP = 0
-TN = 0
-FN = 0
-
-for i in range(0, prediction_mask.shape[0]):
-    for j in range(0, prediction_mask.shape[1]):
-        if prediction_mask[i][j] == mask[i][j]:
-            if prediction_mask[i][j] == 255:
-                TP += 1
-            else:
-                TN += 1
-        else:
-            if prediction_mask[i][j] == 255:
-                FP += 1
-            else:
-                FN += 1
-
-precision = TP/(TP+FP)
-recall = TP/(TP+FN)
-accuracy = 2*precision*recall/(precision+recall)
-
-print('Accuracy:', accuracy)
-
-print("accuracy calculated!")
-
-#----------------------------------------------------------------------------------------
 
 cv2.imshow("Prediction Mask", prediction_mask)
 cv2.imshow("Real Mask", mask)
