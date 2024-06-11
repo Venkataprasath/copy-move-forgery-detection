@@ -129,7 +129,6 @@ for i in range(0, sim_array.shape[0]):
 print("painting over!")
 
 cv2.imshow("Prediction Mask", prediction_mask)
-cv2.imshow("Real Mask", mask)
 cv2.imshow('Original Image', image)
 cv2.imshow('Gray Image', gray)
 
